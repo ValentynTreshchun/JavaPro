@@ -12,7 +12,7 @@ public class HomeWorkApp {
         HW1.isPositiveOrZeroPrint(-18);
         System.out.println(HW1.isNegative(0));
         HW1.printStringNTimes("I'll have a public static final Borsch borsch new Borsch, please.", 3);
-        System.out.println("Is " + year + " a leap year? " + HW1.isLeapYear23(year));
+        System.out.println("Is " + year + " a leap year? " + HW1.isLeapYear(year));
 
     }
 
@@ -67,7 +67,7 @@ public class HomeWorkApp {
         System.out.println("You idiot, borsch should be private, otherwise everyone can have it.");
     }
 
-    private boolean isLeapYear23(int year) {
+    private boolean isLeapYear(int year) {
         return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
     }
 }
