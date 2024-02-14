@@ -1,12 +1,8 @@
 package ua.hillel.treshchun.lessons.Lesson1Homework;
 
-import com.sun.tools.javac.Main;
-
-import java.sql.SQLOutput;
-
 public class HomeWorkApp {
     public static void main(String[] args) {
-        int year = 2200;
+        int year = 2100;
         HomeWorkApp HW1 = new HomeWorkApp();
         HW1.printThreeWords();
         HW1.checkSumSign();
@@ -16,7 +12,7 @@ public class HomeWorkApp {
         HW1.isPositiveOrZeroPrint(-18);
         System.out.println(HW1.isNegative(0));
         HW1.printStringNTimes("I'll have a public static final Borsch borsch new Borsch, please.", 3);
-        System.out.println("Is " + year + " a leap year? " + HW1.isLeapYear(year));
+        System.out.println("Is " + year + " a leap year? " + HW1.isLeapYear23(year));
 
     }
 
@@ -64,18 +60,14 @@ public class HomeWorkApp {
         return a < 0;
     }
 
-    private void printStringNTimes (String str, int n) {
+    private void printStringNTimes(String str, int n) {
         for (int i = 0; i < n; i++) {
             System.out.println(str);
         }
         System.out.println("You idiot, borsch should be private, otherwise everyone can have it.");
     }
 
-    private boolean isLeapYear(int year) {
-        if (year % 4 == 0) {
-            return year % 100 != 0 || year % 400 == 0;
-        }
-        return false;
+    private boolean isLeapYear23(int year) {
+        return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
     }
-
 }
