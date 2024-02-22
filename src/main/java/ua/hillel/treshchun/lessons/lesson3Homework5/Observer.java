@@ -1,4 +1,4 @@
-package ua.hillel.treshchun.lessons.lesson3Homework2;
+package ua.hillel.treshchun.lessons.lesson3Homework5;
 
 import java.util.List;
 
