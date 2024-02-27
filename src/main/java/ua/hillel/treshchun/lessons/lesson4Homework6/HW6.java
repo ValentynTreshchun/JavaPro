@@ -1,5 +1,6 @@
 package ua.hillel.treshchun.lessons.lesson4Homework6;
 
+import ua.hillel.treshchun.lessons.lesson4Homework6.ObstacleImpl.Obstacle;
 import ua.hillel.treshchun.lessons.lesson4Homework6.ObstacleImpl.Treadmill;
 import ua.hillel.treshchun.lessons.lesson4Homework6.ObstacleImpl.Wall;
 import ua.hillel.treshchun.lessons.lesson4Homework6.ParticipantImpl.Cat;
@@ -28,7 +29,7 @@ public class HW6 {
                 new Human(100, 2, "Bob"),
                 new Robot(1000, 4, "Ben")
         };
-        Obstacle [] obstacles = {
+        Obstacle[] obstacles = {
                 new Treadmill(50),
                 new Treadmill(200),
                 new Wall(1),
@@ -53,7 +54,7 @@ public class HW6 {
             System.out.println();
             for (Obstacle obstacle:obstacles
                  ) {
-                if (!obstacle.overcome(participant)) {
+                if (!participant.overcome(obstacle)) {
                     break;
                 }
             }
