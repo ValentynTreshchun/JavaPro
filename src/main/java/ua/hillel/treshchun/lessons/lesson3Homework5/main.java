@@ -25,9 +25,5 @@ public class main {
         zoo.rmAnimal("Norbert");
         zoo.rmAnimal("Max");
         zoo.rmAnimal("Patron");
-
-
-
-
     }
 }
