@@ -3,29 +3,27 @@ package ua.hillel.treshchun.lessons.lesson3Homework5;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Zoo implements Observed{
-
-    AnimalCounter animalsCounter = new AnimalCounter();
+public class Zoo {
+    int animalCounter;
     List<Animals> animalsList = new ArrayList<>();
 
-    @Override
-    public void notifyObserver(boolean animalAdded) {
-        animalsCounter.handleEvent(animalsList, animalAdded);
+    public Zoo() {
+        animalCounter = 0;
     }
 
     public void addAnimal(String name){
         animalsList.add(new Animals(name));
-        notifyObserver(true);
+        handleEvent(true);
     }
 
     public void addCat(String name){
         animalsList.add(new Cat(name));
-        notifyObserver(true);
+        handleEvent(true);
     }
 
     public void addDog(String name){
         animalsList.add(new Dog(name));
-        notifyObserver(true);
+        handleEvent(true);
     }
 
     public void rmAnimal(String name){
@@ -33,9 +31,19 @@ public class Zoo implements Observed{
              ) {
             if (animal.name.equals(name)){
                 animalsList.remove(animal);
-                notifyObserver(false);
+                handleEvent(false);
                 break;
             }
+        }
+    }
+
+    public void handleEvent(boolean animalAdded) {
+        if (animalAdded) {
+            animalCounter++;
+            System.out.println("Animal added. Animals list: " + animalsList + " Total: " + animalCounter);
+        } else {
+            animalCounter--;
+            System.out.println("Animal removed. Animals list: " + animalsList + " Total: " + animalCounter);
         }
     }
 }
