@@ -59,14 +59,14 @@ public class Occurance {
         List<Integer> result = new ArrayList<>();
         result.add(inputList.get(0));
         inputList.forEach(number -> {
-            if (!result.contains(number)){
+            if (!result.contains(number)) {
                 result.add(number);
             }
         });
         return result;
     }
 
-    public static List<String> getDistinct(List<String> inputList){
+    public static List<String> getDistinct(List<String> inputList) {
         List<String> uniqueList = new ArrayList<>();
         uniqueList.add(inputList.get(0));
         inputList.forEach(word -> {
@@ -82,7 +82,7 @@ public class Occurance {
         System.out.println(inputList);
         uniqueList.forEach(uniqueWord -> {
             System.out.print(uniqueWord + ": ");
-            int [] counter = {0};
+            int[] counter = {0};
             inputList.forEach((word) -> {
                 if (uniqueWord.equals(word)) {
                     counter[0]++;
@@ -95,11 +95,10 @@ public class Occurance {
     public static List<Occurance> findOccurance(List<String> inputList) {
         List<Occurance> result = new ArrayList<>();
         List<String> unique = getDistinct(inputList);
-
         unique.forEach(uniqueWord -> {
             Occurance temp = new Occurance(uniqueWord, 0);
             inputList.forEach(word -> {
-                if (word.equals(uniqueWord)){
+                if (word.equals(uniqueWord)) {
                     temp.setCount(temp.getCount() + 1);
                 }
             });
