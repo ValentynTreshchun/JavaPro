@@ -72,7 +72,7 @@ public class HW9 {
         return targetProducts
                 .stream()
                 .min(Comparator.comparing(Product::getPrice))
-                .orElseThrow(() -> new RuntimeException("Exception: product [type = " + type + "] not found"));
+                .orElseThrow(() -> new NoSuchElementException("Exception: product [type = " + type + "] not found"));
     }
 
     private List<Product> getLastAddedProducts(int lastN, List<Product> products) {
