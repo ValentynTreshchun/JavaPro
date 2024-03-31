@@ -18,7 +18,7 @@ public class DiscountedProductWithDate extends DiscountedProduct {
     public String toString() {
         return "\nDPD{" +
                 "\'" + super.getType() + "\'" +
-                ", list: " + super.getPrice() +
+                ", cost: " + super.getPrice() +
                 ", discount: " + super.getDiscount() +
                 ", timeCreated: " + timeCreated +
                 '}';

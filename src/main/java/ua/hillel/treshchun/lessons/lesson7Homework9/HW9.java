@@ -28,7 +28,7 @@ public class HW9 {
         products.add(new DiscountedProduct("Vinyl", 10, 0.1));
 
         System.out.println("Cheapest Book: " + hw9.getCheapestProduct("Book", products));
-        System.out.println("Cheapest Book: " + hw9.getCheapestProduct("Kindle", products));
+        //System.out.println("Cheapest Book: " + hw9.getCheapestProduct("Kindle", products));
 
 
         products.add(new DiscountedProductWithDate("Vinyl", 25, 0.1));
@@ -46,7 +46,7 @@ public class HW9 {
         System.out.println("Total cost of Vinyls added this year, above 75: "
                 + hw9.GetCostByTypePriceYTD("Vinyl", 75, products));
 
-        System.out.println(hw9.GroupByType(products));
+        System.out.println("Products grouped by type:\n" + hw9.GroupByType(products));
 
 
     }
@@ -60,9 +60,9 @@ public class HW9 {
 
     private List<Product> getProductByTypeAndDiscount(String type, double discount, List<Product> products) {
         return products.stream()
-                .filter(product -> product.getType().equals(type)
-                        && product instanceof DiscountedProduct
-                        && ((DiscountedProduct) product).getDiscount() == discount)
+                .filter(product -> product.getType().equals(type))
+                .filter(product -> product instanceof DiscountedProduct)
+                .filter(product -> ((DiscountedProduct) product).getDiscount() == discount)
                 .map(product -> new Product(type, product.getPrice()))
                 .collect(Collectors.toList());
     }
@@ -79,13 +79,7 @@ public class HW9 {
         return products.stream()
                 .filter(product -> product instanceof DiscountedProductWithDate)
                 .map(product -> (DiscountedProductWithDate) product)
-                .sorted((p1, p2) -> {
-                    if (p1.getDate().isAfter(p2.getDate())) {
-                        return -1;
-                    } else if (p1.getDate().isBefore(p2.getDate())) {
-                        return 1;
-                    } else return 0;
-                })
+                .sorted((p1, p2) -> p2.getDate().compareTo(p1.getDate()))
                 .limit(lastN)
                 .collect(Collectors.toList());
     }
@@ -93,10 +87,10 @@ public class HW9 {
     private double GetCostByTypePriceYTD(String type, double minPrice, List<Product> products) {
         final double[] result = {0};
         products.stream()
-                .filter(product -> product instanceof DiscountedProductWithDate
-                        && product.getPrice() > minPrice
-                        && product.getType().equals(type)
-                        && ((DiscountedProductWithDate) product).getDate().getYear()
+                .filter(product -> product instanceof DiscountedProductWithDate)
+                .filter(product -> product.getPrice() > minPrice)
+                .filter(product -> product.getType().equals(type))
+                .filter(product -> ((DiscountedProductWithDate) product).getDate().getYear()
                         == LocalDateTime.now().getYear())
                 .forEach(product -> result[0] = result[0] + product.getPrice());
         return result[0];
@@ -104,19 +98,8 @@ public class HW9 {
 
     private Map<String, List<Product>> GroupByType(List<Product> products) {
         Map<String, List<Product>> result = new HashMap<>();
-        List<String> types = new ArrayList<>();
-        types = products.stream()
-                .map(Product::getType)
-                .distinct()
-                .collect(Collectors.toList());
-        types.stream()
-                .forEach(type -> {
-                    result.put(type, new ArrayList<>());
-                });
         products.stream()
-                .forEach(product -> {
-                    result.get(product.getType()).add(product);
-                });
+                .forEach(product -> result.computeIfAbsent(product.getType(), k -> new ArrayList<>()).add(product));
         return result;
     }
 }
