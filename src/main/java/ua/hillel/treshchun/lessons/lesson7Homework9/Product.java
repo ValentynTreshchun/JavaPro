@@ -20,7 +20,7 @@ public class Product {
     @Override
     public String toString() {
         return "\nProduct{" +
-                "type: \'" + type + '\'' +
+                "\'" + type + '\'' +
                 ", price: " + price +
                 '}';
     }
