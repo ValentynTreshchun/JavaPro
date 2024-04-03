@@ -35,9 +35,9 @@ public class FileNavigator {
     public List<FileData> filterBySize(long limitByteSize){
         List<FileData> result = new ArrayList<>();
         fileList.forEach((path, list) -> list.forEach((file) -> {
-                if (file.getByteSize() <= limitByteSize) {
-                    result.add(file);
-                }
+            if (file.getByteSize() <= limitByteSize) {
+                result.add(file);
+            }
         }));
         return result;
     }
@@ -65,3 +65,4 @@ public class FileNavigator {
         return Map.copyOf(fileList);
     }
 }
+
