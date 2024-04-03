@@ -65,3 +65,4 @@ public class FileNavigator {
         return Map.copyOf(fileList);
     }
 }
+
