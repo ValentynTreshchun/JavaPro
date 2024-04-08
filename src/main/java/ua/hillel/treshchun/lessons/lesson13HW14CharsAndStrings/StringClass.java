@@ -1,4 +1,4 @@
-package ua.hillel.treshchun.lessons.lesson13Homework14;
+package ua.hillel.treshchun.lessons.lesson13HW14CharsAndStrings;
 
 import java.util.Scanner;
 
@@ -27,11 +27,11 @@ public class StringClass {
     }
 
     public String stringReverse(String inputStr) {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (int i = inputStr.length() - 1; i > -1; i--) {
-            result += inputStr.charAt(i);
+            result.append(inputStr.charAt(i));
         }
-        return result;
+        return result.toString();
     }
 
     public boolean isPalindrome(String inputStr) {
@@ -42,7 +42,6 @@ public class StringClass {
     }
 
     public void guessGame() {
-        Scanner scanner = new Scanner(System.in);
         boolean gameWon = false;
         String[] words = {"apple", "orange", "lemon", "banana", "apricot",
                 "avocado", "broccoli", "carrot", "cherry", "garlic", "grape", "melon",
@@ -51,7 +50,7 @@ public class StringClass {
         String randomWord = words[(int) (Math.random() * words.length)];
         System.out.println("Welcome to \"Guess a word\" game! Enter your guess: ");
         while (!gameWon) {
-            String guess = scanner.nextLine();
+            String guess = readWord().toLowerCase();
             StringBuilder guessedPart = new StringBuilder("###############");
             if (!guess.equals(randomWord)) {
                 for (int i = 0; i < guess.length(); i++) {

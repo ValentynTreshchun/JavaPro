@@ -1,4 +1,4 @@
-package ua.hillel.treshchun.lessons.lesson13Homework14;
+package ua.hillel.treshchun.lessons.lesson13HW14CharsAndStrings;
 
 public class HW13 {
     public static void main(String[] args) {
