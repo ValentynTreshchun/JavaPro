@@ -33,7 +33,7 @@ public class FileLoggerConfiguration implements LoggerConfiguration {
     public void createNewFileUponLimitReached() {
         StringBuilder filePatheBuilder = new StringBuilder(filePath);
         int nameChangeIndex = filePatheBuilder.indexOf("_LogFile") - 2;
-        int newNumber = Integer.valueOf(filePatheBuilder.substring(nameChangeIndex, nameChangeIndex + 2)) + 1;
+        int newNumber = Integer.parseInt(filePatheBuilder.substring(nameChangeIndex, nameChangeIndex + 2)) + 1;
         StringBuilder instertString = new StringBuilder();
         if (newNumber < 10) {
             instertString.append("0").append(newNumber);
@@ -42,6 +42,10 @@ public class FileLoggerConfiguration implements LoggerConfiguration {
         }
         filePatheBuilder.replace(nameChangeIndex, nameChangeIndex + 2, instertString.toString());
         filePath = filePatheBuilder.toString();
+        String.format();
+        String str;
+        str.replace();
+        writer.append(String.format(config.getFormat(), new Date(), level, message)); 
     }
 
     public LoggingLevel getLevel() {
