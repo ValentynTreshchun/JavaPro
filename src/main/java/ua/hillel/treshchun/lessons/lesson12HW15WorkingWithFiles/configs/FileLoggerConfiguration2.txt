@@ -1,0 +1,7 @@
+FILE: C:\Users\Valentyn\IdeaProjects\JavaPro\src\main\java\ua\hillel\treshchun\lessons\lesson12HW15WorkingWithFiles\logs\
+
+level: DEBUG
+
+FORMAT: [%s][%s] Message: %s %n
+
+MAX-SIZE: 1024
