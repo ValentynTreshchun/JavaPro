@@ -1,4 +1,4 @@
-package ua.hillel.treshchun.lessons.lesson12HW15WorkingWithFiles;
+package ua.hillel.treshchun.lessons.lesson12HW15WorkingWithFiles.exceptions;
 
 public class FileConfigurationException extends Exception {
     public FileConfigurationException() {

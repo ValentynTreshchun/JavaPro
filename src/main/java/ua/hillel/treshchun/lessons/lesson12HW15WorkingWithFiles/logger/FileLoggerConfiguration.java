@@ -1,15 +1,13 @@
-package ua.hillel.treshchun.lessons.lesson12HW15WorkingWithFiles;
+package ua.hillel.treshchun.lessons.lesson12HW15WorkingWithFiles.logger;
 
 import java.time.LocalDateTime;
 
-public class FileLoggerConfiguration implements LoggerConfiguration {
+public class FileLoggerConfiguration extends LoggerConfiguration {
     private String filePath;
-    private LoggingLevel level;
     private int sizeLimitBytes;
-    private String fileFormat;
 
     public FileLoggerConfiguration(String filePath, LoggingLevel level, int sizeLimitBytes, String fileFormat) {
-        this.level = level;
+        super.setLevel(level);
         StringBuilder filePatheBuilder = new StringBuilder();
         filePatheBuilder.append(filePath)
                 .append("01_LogFile_")
@@ -26,38 +24,26 @@ public class FileLoggerConfiguration implements LoggerConfiguration {
                 .append(LocalDateTime.now().getSecond())
                 .append("s.txt");
         this.filePath = filePatheBuilder.toString();
-        this.fileFormat = fileFormat;
+        super.setOutputFormat(fileFormat);
         this.sizeLimitBytes = sizeLimitBytes;
     }
 
     public void createNewFileUponLimitReached() {
-        StringBuilder filePatheBuilder = new StringBuilder(filePath);
-        int nameChangeIndex = filePatheBuilder.indexOf("_LogFile") - 2;
-        int newNumber = Integer.parseInt(filePatheBuilder.substring(nameChangeIndex, nameChangeIndex + 2)) + 1;
+        StringBuilder filePathBuilder = new StringBuilder(filePath);
+        int nameChangeIndex = filePathBuilder.indexOf("_LogFile") - 2;
+        int newNumber = Integer.parseInt(filePathBuilder.substring(nameChangeIndex, nameChangeIndex + 2)) + 1;
         StringBuilder instertString = new StringBuilder();
         if (newNumber < 10) {
             instertString.append("0").append(newNumber);
         } else {
             instertString.append(newNumber);
         }
-        filePatheBuilder.replace(nameChangeIndex, nameChangeIndex + 2, instertString.toString());
-        filePath = filePatheBuilder.toString();
-        String.format();
-        String str;
-        str.replace();
-        writer.append(String.format(config.getFormat(), new Date(), level, message)); 
-    }
-
-    public LoggingLevel getLevel() {
-        return level;
+        filePathBuilder.replace(nameChangeIndex, nameChangeIndex + 2, instertString.toString());
+        filePath = filePathBuilder.toString();
     }
 
     public String getFilePath() {
         return filePath;
-    }
-
-    public String getFileFormat() {
-        return fileFormat;
     }
 
     public int getSizeLimitBytes() {
@@ -68,9 +54,9 @@ public class FileLoggerConfiguration implements LoggerConfiguration {
     public String toString() {
         return "FileLoggerConfiguration{" +
                 "\n     filePath='" + filePath + '\'' +
-                "\n     level=" + level +
+                "\n     level=" + super.getLevel() +
                 "\n     sizeLimitBytes=" + sizeLimitBytes +
-                "\n     fileFormat='" + fileFormat + '\'' +
+                "\n     fileFormat='" + super.getFormat() + '\'' +
                 '}';
     }
 }

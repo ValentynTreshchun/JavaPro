@@ -1,58 +1,57 @@
-package ua.hillel.treshchun.lessons.lesson12HW15WorkingWithFiles;
+package ua.hillel.treshchun.lessons.lesson12HW15WorkingWithFiles.logger;
+
+import ua.hillel.treshchun.lessons.lesson12HW15WorkingWithFiles.exceptions.FileMaxSizeReachedException;
 
 import java.io.*;
 import java.time.LocalDateTime;
 
-public class FileLogger implements Logger {
-    private FileLoggerConfiguration configuration;
-
+public class FileLogger extends Logger {
     public FileLogger(FileLoggerConfiguration configuration) {
-        this.configuration = configuration;
+        super.setConfiguration(configuration);
     }
 
     public void debug(String message) {
-        if (configuration.getLevel() == LoggingLevel.DEBUG) {
-            StringBuilder logEntry = new StringBuilder();
-            logEntry.append(LocalDateTime.now())
-                    .append(" [DEBUG] Message: ")
-                    .append(message)
-                    .append("\n");
-            try {
-                writeMessage(logEntry);
-            } catch (FileMaxSizeReachedException e) {
-                configuration.createNewFileUponLimitReached();
-                System.out.print(e.getMessage() + configuration.getFilePath());
+            if (super.getConfiguration().getLevel() == LoggingLevel.DEBUG) {
+                StringBuilder logEntry = new StringBuilder();
+                logEntry.append(String.format(super.getConfiguration().getFormat(), LocalDateTime.now(),
+                        super.getConfiguration().getLevel().toString(), message));
+                try {
+                    writeMessage(logEntry.toString());
+                } catch (FileMaxSizeReachedException e) {
+                    ((FileLoggerConfiguration)super.getConfiguration()).createNewFileUponLimitReached();
+                    System.out.print(e.getMessage() + ((FileLoggerConfiguration)super.getConfiguration()).getFilePath());
+                }
             }
-        }
     }
 
     public void info(String message) {
-        if (configuration.getLevel() == LoggingLevel.DEBUG || configuration.getLevel() == LoggingLevel.INFO) {
+        if (super.getConfiguration().getLevel() == LoggingLevel.DEBUG
+                || super.getConfiguration().getLevel() == LoggingLevel.INFO) {
             StringBuilder logEntry = new StringBuilder();
-            logEntry.append(LocalDateTime.now())
-                    .append(" [INFO] Message: ")
-                    .append(message)
-                    .append("\n");
+            logEntry.append(String.format(super.getConfiguration().getFormat(), LocalDateTime.now(),
+                    super.getConfiguration().getLevel().toString(), message));
             try {
-                writeMessage(logEntry);
+                writeMessage(logEntry.toString());
             } catch (FileMaxSizeReachedException e) {
-                configuration.createNewFileUponLimitReached();
-                System.out.print(e.getMessage() + configuration.getFilePath());
+                ((FileLoggerConfiguration)super.getConfiguration()).createNewFileUponLimitReached();
+                System.out.print(e.getMessage() + ((FileLoggerConfiguration)super.getConfiguration()).getFilePath());
             }
         }
     }
 
-    private void writeMessage(StringBuilder logEntry) throws FileMaxSizeReachedException {
+    private void writeMessage(String logEntry) throws FileMaxSizeReachedException {
         try {
-            File logFile = new File(configuration.getFilePath());
-            if ((logFile.length() + logEntry.toString().getBytes().length) >= configuration.getSizeLimitBytes()) {
-                throw new FileMaxSizeReachedException("Max file size limit (" + configuration.getSizeLimitBytes()
-                        + ") reached at " + (logFile.length() + logEntry.toString().getBytes().length)
+            File logFile = new File(((FileLoggerConfiguration)super.getConfiguration()).getFilePath());
+            if ((logFile.length() + logEntry.getBytes().length)
+                    >= ((FileLoggerConfiguration)super.getConfiguration()).getSizeLimitBytes()) {
+                throw new FileMaxSizeReachedException("Max file size limit ("
+                        + ((FileLoggerConfiguration)super.getConfiguration()).getSizeLimitBytes()
+                        + ") reached at " + (logFile.length() + logEntry.getBytes().length)
                         + " bytes, moving to a new file at ");
             }
-            logFile = new File(configuration.getFilePath());
+            logFile = new File(((FileLoggerConfiguration)super.getConfiguration()).getFilePath());
             OutputStream outputStream = new FileOutputStream(logFile, true);
-            outputStream.write(logEntry.toString().getBytes());
+            outputStream.write(logEntry.getBytes());
         } catch (FileNotFoundException e) {
             System.out.println("File not found" + e.getMessage());
         } catch (IOException e) {

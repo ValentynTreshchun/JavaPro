@@ -1,9 +1,13 @@
-package ua.hillel.treshchun.lessons.lesson12HW15WorkingWithFiles;
+package ua.hillel.treshchun.lessons.lesson12HW15WorkingWithFiles.logger;
+
+import ua.hillel.treshchun.lessons.lesson12HW15WorkingWithFiles.constants.ConfigParsePatterns;
+import ua.hillel.treshchun.lessons.lesson12HW15WorkingWithFiles.exceptions.FileConfigurationException;
 
 import java.io.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class FileLoggerConfigurationLoader implements LoggerConfigurationLoader {
-
+public class FileLoggerConfigurationLoader extends LoggerConfigurationLoader {
 
     public FileLoggerConfiguration load(String fileName) throws FileConfigurationException {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)))) {
@@ -12,79 +16,41 @@ public class FileLoggerConfigurationLoader implements LoggerConfigurationLoader 
             int maxSize = 0;
             String format = "";
             String str;
-            StringBuilder strB = new StringBuilder();
+            StringBuilder rawConfig = new StringBuilder();
             try {
-                if ((str = br.readLine()) != null) {
-                    while (str.isBlank()) {
-                        if ((str = br.readLine()) == null) {
-                            throw new FileConfigurationException("File format issue");
-                        }
-                    }
-                    strB.append(str);
-                    if (strB.substring(0, 6).equalsIgnoreCase("file: ")) {
-                        filePath = strB.substring(6);
-                    } else {
-                        System.out.println("Error: no file path found in configuration file.");
-                        throw new FileConfigurationException("Error: no file path found in configuration file.");
-                    }
+                while ((str = br.readLine()) != null) {
+                    rawConfig.append(str).append("\n");
                 }
-                if ((str = br.readLine()) != null) {
-                    while (str.isBlank()) {
-                        if ((str = br.readLine()) == null) {
-                            throw new FileConfigurationException("File format issue");
-                        }
-                    }
-                    strB.setLength(0);
-                    strB.append(str);
-                    if (strB.substring(0, 7).equalsIgnoreCase("LEVEL: ")) {
-                        if (strB.substring(7).equalsIgnoreCase("INFO")) {
-                            level = LoggingLevel.INFO;
-                        } else if (strB.substring(7).equalsIgnoreCase("DEBUG")) {
-                            level = LoggingLevel.DEBUG;
-                        } else {
-                            System.out.println("Error: unsupported logging level found in configuration file: "
-                                    + strB.substring(7));
-                            throw new FileConfigurationException("Unsupported logging level found in configuration file");
-                        }
-                    } else {
-                        System.out.println("Error: no logging LEVEL found in configuration file.");
-                        throw new FileConfigurationException("No logging level found in configuration file.");
-                    }
+                if (rawConfig.isEmpty()) {
+                    throw new FileConfigurationException("Error: Config file empty");
                 }
-                if ((str = br.readLine()) != null) {
-                    while (str.isBlank()) {
-                        if ((str = br.readLine()) == null) {
-                            throw new FileConfigurationException("File format issue");
-                        }
-                    }
-                    strB.setLength(0);
-                    strB.append(str);
-                    if (strB.substring(0, 10).equalsIgnoreCase("MAX-SIZE: ")) {
-                        try {
-                            maxSize = Integer.parseInt(strB.substring(10));
-                        } catch (NumberFormatException e) {
-                            System.out.println("Incorrect MAX-SIZE number format, default value of 128 used");
-                            maxSize = 128;
-                        }
-                    } else {
-                        System.out.println("Error: no MAX-SIZE found in configuration file.");
-                        throw new FileConfigurationException("No MAX-SIZE found in configuration file.");
-                    }
+                filePath = findPattern(ConfigParsePatterns.PATH, rawConfig.toString());
+                if (filePath == null) {
+                    throw new FileConfigurationException("Error: no file path found in configuration file.");
                 }
-                if ((str = br.readLine()) != null) {
-                    while (str.isBlank()) {
-                        if ((str = br.readLine()) == null) {
-                            throw new FileConfigurationException("File format issue");
-                        }
+                String levelStr = findPattern(ConfigParsePatterns.LEVEL, rawConfig.toString());
+                if (levelStr == null) {
+                    throw new FileConfigurationException("Error: No logging level found in configuration file");
+                } else if (levelStr.equalsIgnoreCase("INFO")) {
+                    level = LoggingLevel.INFO;
+                } else if (levelStr.equalsIgnoreCase("DEBUG")) {
+                    level = LoggingLevel.DEBUG;
+                } else {
+                    throw new FileConfigurationException("Error: Logging level \"" + levelStr + "\" is not supported");
+                }
+                try {
+                    maxSize = Integer.parseInt(findPattern(ConfigParsePatterns.MAX_SIZE, rawConfig.toString()));
+                    if (maxSize <= 0) {
+                        System.out.println("MAX-SIZE cannot be 0 or negative, default value of 128 used");
+                        maxSize = 128;
                     }
-                    strB.setLength(0);
-                    strB.append(str);
-                    if (strB.substring(0, 8).equalsIgnoreCase("FORMAT: ")) {
-                        format = strB.substring(8);
-                    } else {
-                        System.out.println("Error: no FORMAT found in file.");
-                        throw new FileConfigurationException("No FORMAT found in configuration file.");
-                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Incorrect MAX-SIZE number format, default value of 128 used");
+                    maxSize = 128;
+                }
+                format = findPattern(ConfigParsePatterns.FORMAT, rawConfig.toString());
+                if (format == null) {
+                    throw new FileConfigurationException("Error: No FORMAT found in configuration file.");
                 }
             } catch (IOException e) {
                 System.out.println("IO exception: " + e.getMessage());
@@ -96,5 +62,15 @@ public class FileLoggerConfigurationLoader implements LoggerConfigurationLoader 
             System.out.println("IO exception: " + e.getMessage());
         }
         throw new FileConfigurationException("Issues with BufferReader");
+    }
+
+    private String findPattern(String regex, String inputStr) {
+        String result = null;
+        Pattern lookupPattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = lookupPattern.matcher(inputStr);
+        if (matcher.find()) {
+            result = matcher.group(1);
+        }
+        return result;
     }
 }

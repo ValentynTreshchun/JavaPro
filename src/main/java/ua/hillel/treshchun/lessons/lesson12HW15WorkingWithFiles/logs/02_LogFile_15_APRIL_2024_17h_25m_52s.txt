@@ -1,5 +1,0 @@
-2024-04-15T17:25:52.230563300 [INFO] Message: Number 7 Info message
-2024-04-15T17:25:52.231561 [DEBUG] Message: Number 8 Debug message
-2024-04-15T17:25:52.232557600 [INFO] Message: Number 8 Info message
-2024-04-15T17:25:52.232557600 [DEBUG] Message: Number 9 Debug message
-2024-04-15T17:25:52.233561300 [INFO] Message: Number 9 Info message
